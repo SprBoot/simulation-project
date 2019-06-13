@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xuxiaonan.simulationprojectshiro.mapper.ShiroMapper">
+    <!-- 根据用户名获取用户信息 -->
+    <select id="getUserInfo" parameterType="String" resultType="cn.xuxiaonan.entities.User">
+        SELECT * FROM user_tb WHERE username = #{username}
+    </select>
+    <!-- 根据用户id获取用户的权限信息 -->
+    <select id="getPermissionById" parameterType="String" resultType="cn.xuxiaonan.entities.Permission">
+        SELECT
+		permission_tb.permission
+		FROM
+		permission_tb
+		JOIN (
+		rolepermiss_tb
+		JOIN (
+		role_tb
+		JOIN (
+		userrole_tb
+		JOIN
+		user_tb
+		ON userrole_tb.userId = user_tb.id
+		) ON role_tb.id =
+		userrole_tb.roleId
+		) ON rolepermiss_tb.roleId = role_tb.id
+		) ON permission_tb.id = rolepermiss_tb.permissId
+		WHERE
+		user_tb.id = #{id}
+    </select>
+</mapper>

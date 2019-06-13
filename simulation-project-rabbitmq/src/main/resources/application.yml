@@ -1,0 +1,37 @@
+##端口配置
+server:
+  port: 9091
+spring:
+  application:
+    name: simulation-project-rabbitmq
+  ## rabbitmq配置
+  rabbitmq:
+    host:
+    username: admin
+    password: admin
+    port: 5672
+  ## redis配置
+  redis:
+    host:
+    port: 6379
+    timeout: 6000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    database: 4
+## eureka客户端配置
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    instance-id: simulation-project-rabbitmq   #自定义服务名称信息
+    prefer-ip-address: true     #访问路径可以显示IP地址
+info:
+  app.name: simulation-project-rabbitmq
+  company.name: cn.xuxiaonan
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$

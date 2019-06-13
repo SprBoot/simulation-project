@@ -1,0 +1,57 @@
+## 端口配置
+server:
+  port: 9527
+
+spring:
+  application:
+    name: simulation-project-zuul
+  ## redis配置
+  redis:
+    host:
+    port: 6379
+    timeout: 6000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    database: 4
+## eureka客户端设置
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka/
+  instance:
+    instance-id: gateway-9527.com
+    prefer-ip-address: true
+## 网关配置
+zuul:
+  ##统一前缀
+  ## 忽略原微服务名称
+  ignored-services: "*"
+  ## 忽略session
+  sensitiveHeaders: "*"
+  routes:
+    myUser:
+      serviceId: simulation-project-user
+      path: /user/**
+    redis-session:
+      path: /user-session/**
+      serviceId: simulation-project-session
+    shiro:
+      path: /shiro/**
+      serviceId: simulation-project-shiro
+    es:
+      path: /es/**
+      serviceId: simulation-project-es
+    rabbitMq:
+      path: /rabbitmq/**
+      serviceId: simulation-project-rabbitmq
+  prefix: /simulation
+
+info:
+  app.name: simulation-project-zuul
+  company.name: cn.xuxiaonan
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$

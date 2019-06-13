@@ -1,0 +1,13 @@
+## 端口
+server:
+  port: 80
+## 容错
+feign:
+  hystrix:
+    enabled: true
+## eureka客户端设置
+eureka:
+  client:
+    register-with-eureka: false
+    serviceUrl:
+      defaultZone: http://localhost:7001/eureka/

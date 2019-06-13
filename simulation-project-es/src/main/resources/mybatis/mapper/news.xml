@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xuxiaonan.simulationprojectes.mapper.NewsMapper">
+    <select id="getNewsList" resultType="cn.xuxiaonan.simulationprojectes.entities.New">
+        SELECT * FROM xw_tb WHERE shzt = 2;
+    </select>
+</mapper>

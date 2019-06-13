@@ -1,0 +1,64 @@
+##数据源配置
+spring:
+  application:
+    name: simulation-project-user
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://localhost:9092
+  ## redis配置
+  redis:
+    host:
+    port: 6379
+    timeout: 6000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    database: 4
+  datasource:
+    username:
+    password:
+    url: jdbc:mysql://:3306/wisdombrain?useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+## 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+## 端口配置
+server:
+  port: 8080
+  use-forward-headers: true
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+    port-header: X-Forwarded-Port
+    #其它设置是让Tomcat去Http头信息去获取协议信息，而不是从HttpServletRequest
+    internal-proxies: 192\.168\.\d{1,3}\.\d{1,3}
+## eureka客户端配置
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    instance-id: simulation-project-user   #自定义服务名称信息
+    prefer-ip-address: true     #访问路径可以显示IP地址
+info:
+  app.name: simulation-project-user
+  company.name: cn.xuxiaonan
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$
+
+## 容错
+feign:
+  hystrix:
+    enabled: true
+## sql语句
+logging:
+  level:
+    cn.xuxiaonan.simulationprojectuser.mapper: debug
