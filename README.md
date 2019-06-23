@@ -1,6 +1,586 @@
+# simulation-project
+虚拟仿真实验项目分布式框架
+=======
 ### 虚拟仿真实验项目开发文档
 
 #### 数据库设计
+
+##### user 用户表
+
+| 字段     | 类型      | 长度 | 说明                 | 是否为空 |
+| -------- | --------- | ---- | -------------------- | -------- |
+| id       | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| username | varchar   | 16   | 用户名               | 不为空   |
+| password | varchar   | 16   | 密码，长度为16位     | 不为空   |
+| salt     | varchar   | 16   | md5加密的盐          | 不为空   |
+| phone    | varchar   | 11   | 用户的手机号码       | 不为空   |
+| date     | timestamp | 0    | 时间戳               | 不为空   |
+
+##### role 角色表
+
+| 字段        | 类型      | 长度 | 说明                 | 是否为空 |
+| ----------- | --------- | ---- | -------------------- | -------- |
+| id          | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| roleName    | varchar   | 10   | 角色名称             | 不为空   |
+| description | varchar   | 25   | 角色描述             | 不为空   |
+| date        | timestamp | 0    | 时间戳               | 不为空   |
+
+##### permission 权限表
+
+| 字段           | 类型      | 长度 | 说明                 | 是否为空 |
+| -------------- | --------- | ---- | -------------------- | -------- |
+| id             | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| permissionName | varchar   | 16   | 权限名称             | 不为空   |
+| description    | varchar   | 25   | 权限描述             | 不为空   |
+| date           | timestamp | 0    | 时间戳               | 不为空   |
+
+##### userrole 用户角色关系表
+
+| 字段   | 类型      | 长度 | 说明                 | 是否为空 |
+| ------ | --------- | ---- | -------------------- | -------- |
+| id     | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| roleId | varchar   | 32   | 角色id，uuid         | 不为空   |
+| userId | varchar   | 32   | 用户id，uuid         | 不为空   |
+| date   | timestamp | 0    | 时间戳               | 不为空   |
+
+##### rolepermission 角色权限关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| roleId       | varchar   | 32   | 角色id，uuid         | 不为空   |
+| permissionId | varchar   | 32   | 权限id，uuid         | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### student_info 学生信息表
+
+| 字段         | 类型      | 长度 | 说明                        | 是否为空 |
+| ------------ | --------- | ---- | --------------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增        | 不为空   |
+| picId        | varchar   | 32   | 头像图片id                  | 可为空   |
+| username     | varchar   | 16   | 用户名                      | 不为空   |
+| email        | varchar   | 25   | 邮箱                        | 可为空   |
+| phone        | varchar   | 11   | 手机号                      | 不为空   |
+| name         | varchar   | 5    | 真实姓名                    | 可为空   |
+| sex          | int       | 1    | 性别，0为男，1为女，2为其他 | 可为空   |
+| birth        | date      | 0    | 生日                        | 可为空   |
+| PID          | varchar   | 18   | 身份证                      | 可为空   |
+| school       | varchar   | 16   | 学校名称                    | 可为空   |
+| education    | varchar   | 10   | 学历                        | 可为空   |
+| introduction | varchar   | 255  | 个人简介                    | 可为空   |
+| date         | timestamp | 0    | 时间戳                      | 不为空   |
+
+#####  teacher_info 教师信息表
+
+| 字段         | 类型      | 长度 | 说明                        | 是否为空 |
+| ------------ | --------- | ---- | --------------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增        | 不为空   |
+| number       | varchar   | 64   | 教职工号                    | 不为空   |
+| picId        | varchar   | 32   | 头像图片id                  | 可为空   |
+| username     | varchar   | 16   | 用户名                      | 不为空   |
+| email        | varchar   | 25   | 邮箱                        | 可为空   |
+| phone        | varchar   | 11   | 手机号                      | 不为空   |
+| name         | varchar   | 5    | 真实姓名                    | 可为空   |
+| sex          | int       | 1    | 性别，0为男，1为女，2为其他 | 可为空   |
+| birth        | date      | 0    | 生日                        | 可为空   |
+| PID          | varchar   | 18   | 身份证                      | 可为空   |
+| school       | varchar   | 16   | 学校名称                    | 可为空   |
+| education    | varchar   | 10   | 学历                        | 可为空   |
+| field        | varchar   | 25   | 擅长的领域                  | 可为空   |
+| loService    | int       | 2    | 工龄                        | 不为空   |
+| introduction | varchar   | 255  | 个人简介                    | 可为空   |
+| achievement  | varchar   | 255  | 个人成就                    | 可为空   |
+| date         | timestamp | 0    | 时间戳                      | 不为空   |
+
+##### user_Info	用户信息关系表
+
+| 字段   | 类型      | 长度 | 说明                     | 是否为空 |
+| ------ | --------- | ---- | ------------------------ | -------- |
+| id     | varchar   | 32   | 主键id，uuid，不自增     | 不为空   |
+| userId | varchar   | 32   | 用户id，uuid             | 不为空   |
+| infoId | varchar   | 32   | 用户信息id，uuid         | 不为空   |
+| type   | int       | 1    | 角色id，0为学生，1为教师 | 不为空   |
+| date   | timestamp | 0    | 时间戳                   | 不为空   |
+
+##### class_info 班级信息表
+
+| 字段       | 类型      | 长度 | 说明                 | 是否为空 |
+| ---------- | --------- | ---- | -------------------- | -------- |
+| id         | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| className  | varchar   | 16   | 班级名称             | 不为空   |
+| number     | int       | 3    | 班级总人数           | 不为空   |
+| grade      | varchar   | 10   | 年级                 | 不为空   |
+| department | varchar   | 16   | 所在系               | 可为空   |
+| date       | timestamp | 0    | 时间戳               | 不为空   |
+
+##### user_class 用户班级关系表
+
+| 字段    | 类型      | 长度 | 说明                 | 是否为空 |
+| ------- | --------- | ---- | -------------------- | -------- |
+| id      | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| userId  | varchar   | 32   | 用户id，uuid         | 不为空   |
+| classId | varchar   | 32   | 班级id，uuid         | 不为空   |
+| date    | timestamp | 0    | 时间戳               | 不为空   |
+
+##### school_info 学校信息表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| schoolName   | varchar   | 16   | 学校名称             | 不为空   |
+| address      | varchar   | 45   | 学校地址             | 可为空   |
+| label        | varchar   | 16   | 学校标签             | 可为空   |
+| introduction | varchar   | 255  | 学校简介             | 可为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### user_school 用户学校关系表
+
+| 字段     | 类型      | 长度 | 说明                 | 是否为空 |
+| -------- | --------- | ---- | -------------------- | -------- |
+| id       | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| userId   | varchar   | 32   | 用户id，uuid         | 不为空   |
+| schoolId | varchar   | 32   | 学校id，uuid         | 不为空   |
+| date     | timestamp | 0    | 时间戳               | 不为空   |
+
+##### class_school 班级学校关系表
+
+| 字段     | 类型      | 长度 | 说明                 | 是否为空 |
+| -------- | --------- | ---- | -------------------- | -------- |
+| id       | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| classId  | varchar   | 32   | 班级id，uuid         | 不为空   |
+| schoolId | varchar   | 32   | 学校id，uuid         | 不为空   |
+| date     | timestamp | 0    | 时间戳               | 不为空   |
+
+##### picture 图片表
+
+| 字段        | 类型      | 长度 | 说明                 | 是否为空 |
+| ----------- | --------- | ---- | -------------------- | -------- |
+| id          | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| initialName | varchar   | 45   | 图片原始名称         | 不为空   |
+| uuidName    | varchar   | 32   | 图片新生成的uuid名称 | 不为空   |
+| type        | varchar   | 5    | 图片类型             | 不为空   |
+| address     | varchar   | 255  | 图片所在的地址       | 不为空   |
+| date        | timestamp | 0    | 时间戳               | 不为空   |
+
+##### file 文件表
+
+| 字段        | 类型      | 长度 | 说明                 | 是否为空 |
+| ----------- | --------- | ---- | -------------------- | -------- |
+| id          | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| initialName | varchar   | 45   | 文件原始名称         | 不为空   |
+| uuidName    | varchar   | 32   | 文件新的uuid名称     | 不为空   |
+| type        | varchar   | 5    | 文件类型             | 不为空   |
+| address     | varchar   | 255  | 文件所在的地址       | 不为空   |
+| date        | timestamp | 0    | 时间戳               | 不为空   |
+
+##### comment 评论表
+
+| 字段       | 类型      | 长度 | 说明                 | 是否为空 |
+| ---------- | --------- | ---- | -------------------- | -------- |
+| id         | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| moduleId   | varchar   | 32   | 模块id               | 不为空   |
+| authorId   | varchar   | 32   | 被评论者用户id       | 不为空   |
+| commentId  | varchar   | 32   | 评论者用户id         | 不为空   |
+| floor      | int       | 1    | 评论的层级           | 不为空   |
+| context    | text      | 0    | 评论的内容           | 不为空   |
+| likeNumber | int       | 11   | 点赞量               | 不为空   |
+| flag       | varchar   | 32   | 评论的标识符         | 不为空   |
+| date       | timestamp | 0    | 时间戳               | 不为空   |
+
+##### notice 通知表
+
+| 字段     | 类型      | 长度 | 说明                       | 是否为空 |
+| -------- | --------- | ---- | -------------------------- | -------- |
+| id       | varchar   | 32   | 主键id，uuid，不自增       | 不为空   |
+| title    | varchar   | 45   | 通知的标题                 | 不为空   |
+| context  | text      | 0    | 通知的内容                 | 不为空   |
+| userId   | varchar   | 32   | 被通知用户id               | 不为空   |
+| byUserId | varchar   | 32   | 通知用户id                 | 不为空   |
+| hasRead  | int       | 1    | 是否已读，0为已读，1为未读 | 不为空   |
+| date     | timestamp | 0    | 时间戳                     | 不为空   |
+
+##### notice_file 通知文件关系表
+
+| 字段     | 类型      | 长度 | 说明                 | 是否为空 |
+| -------- | --------- | ---- | -------------------- | -------- |
+| id       | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| noticeId | varchar   | 32   | 通知id               | 不为空   |
+| fileId   | varchar   | 32   | 文件id               | 不为空   |
+| date     | timestamp | 0    | 时间戳               | 不为空   |
+
+##### curriculum 课程信息表
+
+| 字段            | 类型      | 长度 | 说明                         | 是否为空 |
+| --------------- | --------- | ---- | ---------------------------- | -------- |
+| id              | varchar   | 32   | 主键id，uuid，不自增         | 不为空   |
+| experimentName  | varchar   | 25   | 实验名称                     | 不为空   |
+| teacherName     | varchar   | 5    | 教师名称                     | 不为空   |
+| whichDay        | varchar   | 10   | 周几                         | 不为空   |
+| address         | varchar   | 25   | 地点                         | 不为空   |
+| startWeek       | int       | 2    | 开始周                       | 不为空   |
+| endWeek         | int       | 2    | 结束周                       | 不为空   |
+| sdwFlag         | int       | 1    | 单双周标记，0为单周，1为双周 | 不为空   |
+| whichCurriculum | varchar   | 16   | 第几节课                     | 不为空   |
+| sectionNumber   | int       | 2    | 节数                         | 不为空   |
+| semester        | varchar   | 25   | 学期                         | 不为空   |
+| date            | timestamp | 0    | 时间                         | 不为空   |
+
+##### class_curriculum 班级课程关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| classId      | varchar   | 32   | 班级id，uuid         | 不为空   |
+| curriculumId | varchar   | 32   | 课程id，uuid         | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### group 分组表
+
+| 字段   | 类型      | 长度 | 说明                 | 是否为空 |
+| ------ | --------- | ---- | -------------------- | -------- |
+| id     | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| name   | varchar   | 16   | 分组名称             | 不为空   |
+| number | int       | 3    | 分组人数             | 不为空   |
+| date   | timestamp | 0    | 时间戳               | 不为空   |
+
+##### group_user 用户分组关系表
+
+| 字段    | 类型      | 长度 | 说明                 | 是否为空 |
+| ------- | --------- | ---- | -------------------- | -------- |
+| id      | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| groupId | varchar   | 32   | 分组id，uuid         | 不为空   |
+| userId  | varchar   | 32   | 用户id，uuid         | 不为空   |
+| date    | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment 实验表
+
+| 字段    | 类型      | 长度 | 说明                 | 是否为空 |
+| ------- | --------- | ---- | -------------------- | -------- |
+| id      | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| name    | varchar   | 25   | 实验名称             | 不为空   |
+| coverId | varchar   | 32   | 实验的封面图片id     | 可为空   |
+| context | text      | 0    | 实验的简介内容       | 不为空   |
+| date    | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_group 实验分组关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| groupId      | varchar   | 32   | 分组id，uuid         | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### class_group 班级分组关系表
+
+| 字段    | 类型      | 长度 | 说明                 | 是否为空 |
+| ------- | --------- | ---- | -------------------- | -------- |
+| id      | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| classId | varchar   | 32   | 班级id，uuid         | 不为空   |
+| groupId | varchar   | 32   | 分组id，uuid         | 不为空   |
+| date    | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_statistics 实验统计表
+
+| 字段        | 类型      | 长度 | 说明                 | 是否为空 |
+| ----------- | --------- | ---- | -------------------- | -------- |
+| id          | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| totalNumber | int       | 11   | 实验学习的总人数     | 不为空   |
+| difficult   | varchar   | 5    | 实验的难易程度       | 不为空   |
+| avgComplete | int       | 3    | 实验的平均完成情况   | 不为空   |
+| avgGrade    | int       | 3    | 实验的平均成绩       | 不为空   |
+| score       | int       | 3    | 实验的评分信息       | 不为空   |
+| date        | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_experiment_statistics 实验统计信息关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| statisticsId | varchar   | 32   | 实验统计信息id，uuid | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_grade 实验成绩表
+
+| 字段    | 类型      | 长度 | 说明                               | 是否为空 |
+| ------- | --------- | ---- | ---------------------------------- | -------- |
+| id      | varchar   | 32   | 主键id，uuid，不自增               | 不为空   |
+| score   | int       | 3    | 实验成绩                           | 不为空   |
+| comment | varchar   | 45   | 教师评语                           | 不为空   |
+| status  | int       | 1    | 实验完成状态，0为已完成，1为未完成 | 不为空   |
+| date    | timestamp | 0    | 时间戳                             | 不为空   |
+
+##### experiment_user_grade 用户实验成绩关系表
+
+| 字段              | 类型      | 长度 | 说明                 | 是否为空 |
+| ----------------- | --------- | ---- | -------------------- | -------- |
+| id                | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| experimentId      | varchar   | 32   | 实验id，uuid         | 不为空   |
+| userId            | varchar   | 32   | 用户id，uuid         | 不为空   |
+| experimentGradeId | varchar   | 32   | 实验成绩id，uuid     | 不为空   |
+| date              | timestamp | 0    | 时间戳               | 不为空   |
+
+##### type 类型表
+
+| 字段        | 类型      | 长度 | 说明                 | 是否为空 |
+| ----------- | --------- | ---- | -------------------- | -------- |
+| id          | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| name        | varchar   | 25   | 类型名称             | 不为空   |
+| description | varchar   | 255  | 类型描述             | 不为空   |
+| date        | timestamp | 0    | 时间戳               | 不为空   |
+
+##### type_experimentType 一级二级实验类型关系表
+
+| 字段             | 类型      | 长度 | 说明                 | 是否为空 |
+| ---------------- | --------- | ---- | -------------------- | -------- |
+| id               | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| typeId           | varchar   | 32   | 一级id，uuid         | 不为空   |
+| experimentTypeId | varchar   | 32   | 实验类型id，uuid     | 不为空   |
+| date             | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_type 实验类型表
+
+| 字段        | 类型      | 长度 | 说明                 | 是否为空 |
+| ----------- | --------- | ---- | -------------------- | -------- |
+| id          | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| name        | varchar   | 25   | 类型的名称           | 不为空   |
+| description | varchar   | 255  | 类型的描述           | 可为空   |
+| date        | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_experimentType 实验类型关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| typeId       | varchar   | 32   | 类型Id               | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_school 学校实验关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| schoolId     | varchar   | 32   | 学校id，uuid         | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_user 实验用户关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| userId       | varchar   | 32   | 用户id，uuid         | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_class 实验班级关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| classId      | varchar   | 32   | 班级id，uuid         | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_file 实验文件关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| fileId       | varchar   | 32   | 文件id，uuid         | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_comment 实验评论关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| commentId    | varchar   | 32   | 评论id，uuid         | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### grade 年级表
+
+| 字段  | 类型      | 长度 | 说明                 | 是否为空 |
+| ----- | --------- | ---- | -------------------- | -------- |
+| id    | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| grade | varchar   | 16   | 年级                 | 不为空   |
+| total | int       | 3    | 班级总数             | 不为空   |
+| date  | timestamp | 0    | 时间戳               | 不为空   |
+
+##### grade_class 年级班级关系表
+
+| 字段    | 类型      | 长度 | 说明                 | 是否为空 |
+| ------- | --------- | ---- | -------------------- | -------- |
+| id      | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| gradeId | varchar   | 32   | 年级id，uuid         | 不为空   |
+| classId | varchar   | 32   | 班级id，uuid         | 不为空   |
+| date    | timestamp | 0    | 时间戳               | 不为空   |
+
+##### experiment_grades 实验年级关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| gradeId      | varchar   | 32   | 年级id，uuid         | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### choice 选项表
+
+| 字段    | 类型      | 长度 | 说明                 | 是否为空 |
+| ------- | --------- | ---- | -------------------- | -------- |
+| id      | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| option  | varchar   | 1    | 选项                 | 不为空   |
+| context | varchar   | 255  | 选项内容             | 不为空   |
+| date    | timestamp | 0    | 时间戳               | 不为空   |
+
+##### choiceQuestion 选择题表
+
+| 字段          | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------- | --------- | ---- | -------------------- | -------- |
+| id            | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| topic         | varchar   | 45   | 题目                 | 不为空   |
+| optionNumber  | int       | 1    | 选项数量             | 不为空   |
+| correctOption | varchar   | 16   | 正确的选项           | 不为空   |
+| correctAnswer | varchar   | 1000 | 正确的答案           | 不为空   |
+| date          | timestamp | 0    | 时间戳               | 不为空   |
+
+##### choice_choiceQuestion 选择题关系表
+
+| 字段       | 类型      | 长度 | 说明                 | 是否为空 |
+| ---------- | --------- | ---- | -------------------- | -------- |
+| id         | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| questionId | varchar   | 32   | 选择题id，uuid       | 不为空   |
+| choiceId   | varchar   | 32   | 选项id，uuid         | 不为空   |
+| date       | timestamp | 0    | 时间戳               | 不为空   |
+
+##### answerQuestion 简答题表
+
+| 字段          | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------- | --------- | ---- | -------------------- | -------- |
+| id            | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| topic         | text      | 0    | 题目                 | 不为空   |
+| correctAnswer | text      | 0    | 正确答案             | 不为空   |
+| date          | timestamp | 0    | 时间戳               | 不为空   |
+
+##### tfQuestion 判断题表
+
+| 字段          | 类型      | 长度 | 说明                   | 是否为空 |
+| ------------- | --------- | ---- | ---------------------- | -------- |
+| id            | varchar   | 32   | 主键id，uuid，不自增   | 不为空   |
+| topic         | varchar   | 45   | 题目                   | 不为空   |
+| correctAnswer | int       | 1    | 正确答案，0为对，1为错 | 不为空   |
+| date          | timestamp | 0    | 时间戳                 | 不为空   |
+
+##### assignment 作业表
+
+| 字段         | 类型      | 长度 | 说明                               | 是否为空 |
+| ------------ | --------- | ---- | ---------------------------------- | -------- |
+| id           | varchar   | 25   | 主键id，uuid，不自增               | 不为空   |
+| name         | varchar   | 45   | 作业名称                           | 不为空   |
+| number       | int       | 3    | 作业题目数量                       | 不为空   |
+| choiceNumber | int       | 3    | 选择题数量                         | 不为空   |
+| choiceScore  | int       | 3    | 选择题每题分数                     | 不为空   |
+| answerNumber | int       | 3    | 简答题数量                         | 不为空   |
+| answerScore  | int       | 3    | 简答题每题分数                     | 不为空   |
+| tfNumber     | int       | 3    | 判断题题目数量                     | 不为空   |
+| tfScore      | int       | 3    | 判断题题目每题分数                 | 不为空   |
+| totalScore   | int       | 3    | 作业总分数                         | 不为空   |
+| startTime    | date      | 0    | 作业开始时间                       | 不为空   |
+| endTime      | date      | 0    | 作业结束时间                       | 不为空   |
+| status       | int       | 1    | 作业当前状态，0为可提交，1为已结束 | 不为空   |
+| date         | timestamp | 0    | 时间戳                             | 不为空   |
+
+##### assignment_question 作业题目关系表
+
+| 字段         | 类型      | 长度 | 说明                                      | 是否为空 |
+| ------------ | --------- | ---- | ----------------------------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增                      | 不为空   |
+| assignmentId | varchar   | 32   | 作业id，uuid                              | 不为空   |
+| questionId   | varchar   | 32   | 问题Id，uuid                              | 不为空   |
+| questionType | int       | 1    | 问题类型，0为选择题，1为简答题，2为判断题 | 不为空   |
+| date         | timestamp | 0    | 时间戳                                    | 不为空   |
+
+##### assignment_experiment 作业实验关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| assignmentId | varchar   | 32   | 作业id，uuid         | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### assignment_experiment_user 作业实验用户关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| assignmentId | varchar   | 32   | 作业id，uuid         | 不为空   |
+| userId       | varchar   | 32   | 用户id，uuid         | 不为空   |
+| experimentId | varchar   | 32   | 实验id，uuid         | 不为空   |
+| roleId       | varchar   | 32   | 用户角色id，uuid     | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### student_assignment 学生作业表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 25   | 主键id，uuid，不自增 | 不为空   |
+| name         | varchar   | 45   | 作业名称             | 不为空   |
+| number       | int       | 3    | 作业题目数量         | 不为空   |
+| choiceNumber | int       | 3    | 选择题数量           | 不为空   |
+| choiceScore  | int       | 3    | 选择题每题分数       | 不为空   |
+| answerNumber | int       | 3    | 简答题数量           | 不为空   |
+| answerScore  | int       | 3    | 简答题每题分数       | 不为空   |
+| tfNumber     | int       | 3    | 判断题题目数量       | 不为空   |
+| tfScore      | int       | 3    | 判断题题目每题分数   | 不为空   |
+| totalScore   | int       | 3    | 作业总分数           | 不为空   |
+| stduentScore | int       | 3    | 学生得分数           | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### student_assignment_choiceQuestion 学生回答选择题表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| topic        | varchar   | 45   | 题目                 | 不为空   |
+| option       | varchar   | 16   | 学生选择的选项       | 不为空   |
+| optionAnswer | varchar   | 1000 | 选项的答案           | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+##### student_assignment_answerQuestion 学生回答简答题表
+
+| 字段   | 类型      | 长度 | 说明                 | 是否为空 |
+| ------ | --------- | ---- | -------------------- | -------- |
+| id     | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| topic  | text      | 0    | 题目                 | 不为空   |
+| answer | text      | 0    | 学生答案             | 不为空   |
+| date   | timestamp | 0    | 时间戳               | 不为空   |
+
+##### student_assignment_tfQuestion 学生回答判断题表
+
+| 字段   | 类型      | 长度 | 说明                   | 是否为空 |
+| ------ | --------- | ---- | ---------------------- | -------- |
+| id     | varchar   | 32   | 主键id，uuid，不自增   | 不为空   |
+| topic  | varchar   | 45   | 题目                   | 不为空   |
+| answer | int       | 1    | 学生答案，0为对，1为错 | 不为空   |
+| date   | timestamp | 0    | 时间戳                 | 不为空   |
+
+##### stduent_assignment_question 学生作业题目关系表
+
+| 字段         | 类型      | 长度 | 说明                 | 是否为空 |
+| ------------ | --------- | ---- | -------------------- | -------- |
+| id           | varchar   | 32   | 主键id，uuid，不自增 | 不为空   |
+| assignmentId | varchar   | 32   | 作业id，uuid         | 不为空   |
+| questionId   | varchar   | 32   | 问题Id，uuid         | 不为空   |
+| questionType | int       | 1    | 问题类型             | 不为空   |
+| date         | timestamp | 0    | 时间戳               | 不为空   |
+
+
 
 #### 架构搭建
 
@@ -1326,8 +1906,3 @@ public interface NewsService {
 ##### 推荐系统
 
 ##### 审核系统
-
-
-
-
-
