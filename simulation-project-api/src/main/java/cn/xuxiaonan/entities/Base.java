@@ -8,10 +8,8 @@
 package cn.xuxiaonan.entities;
 
 import cn.xuxiaonan.util.RandomNumberUtil;
-import cn.xuxiaonan.util.TimeUtil;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 〈实体类的公共部分〉
@@ -24,10 +22,6 @@ public class Base implements Serializable {
      * 主键id
      **/
     private String id;
-    /**
-     * 时间
-     **/
-    private Date date;
 
     public String getId() {
         return id;
@@ -35,14 +29,6 @@ public class Base implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
     /**
      * @Author dinggc
@@ -53,6 +39,5 @@ public class Base implements Serializable {
      **/
     public Base() {
         this.id = RandomNumberUtil.getUUID();
-        this.date = TimeUtil.getCurrentTime();
     }
 }
