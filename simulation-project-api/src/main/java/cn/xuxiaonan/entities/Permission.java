@@ -1,7 +1,5 @@
 package cn.xuxiaonan.entities;
 
-import java.util.Date;
-
 /***
 * @Description: 权限实体类
 * @Author: dinggc
@@ -11,22 +9,18 @@ public class Permission extends Base{
     /**
      * 权限
      */
-    private String permission;
+    private String permissionName;
     /**
      * 描述
      */
     private String description;
-    /**
-     * 更新日期
-     */
-    private Date gxdate;
 
-    public String getPermission() {
-        return permission;
+    public String getPermissionName() {
+        return permissionName;
     }
 
-    public void setPermission(String permission) {
-        this.permission = permission;
+    public void setPermissionName(String permissionName) {
+        this.permissionName = permissionName;
     }
 
     public String getDescription() {
@@ -35,13 +29,5 @@ public class Permission extends Base{
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Date getGxdate() {
-        return gxdate;
-    }
-
-    public void setGxdate(Date gxdate) {
-        this.gxdate = gxdate;
     }
 }
