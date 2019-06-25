@@ -1,7 +1,8 @@
 package cn.xuxiaonan.enums;
 
 public enum Keywords {
-    TITLE("title");
+    TITLE("title"),
+    EXPERIMENTNAME("name");
     private String keywordsName;
     /**
      * @Author dinggc
