@@ -5,6 +5,7 @@ import cn.xuxiaonan.simulationprojectes.Repository.NewsRepository;
 import cn.xuxiaonan.simulationprojectes.entities.New;
 import cn.xuxiaonan.simulationprojectes.service.EsService;
 import cn.xuxiaonan.simulationprojectes.service.NewsService;
+import cn.xuxiaonan.simulationprojectes.util.QueryUtils;
 import cn.xuxiaonan.util.ResponseUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -90,10 +91,7 @@ public class NewsEsController {
     @RequestMapping(value = "searchMatchQuery/{keywords}")
     @ResponseBody
     public Object searchMatchQuery(@PathVariable("keywords") Object keywords){
-        //构建查询条件
-        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
-        //添加基本分词查询
-        queryBuilder.withQuery(QueryBuilders.termQuery(Keywords.TITLE.getKeywordsName(),keywords));
+        NativeSearchQueryBuilder queryBuilder = QueryUtils.getQueryBuilder(Keywords.EXPERIMENTNAME.getKeywordsName(), keywords);
         //查询
         Page<New> news = newsRepository.search(queryBuilder.build());
         return news;

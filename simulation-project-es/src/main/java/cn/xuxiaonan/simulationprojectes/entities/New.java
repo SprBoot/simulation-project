@@ -6,7 +6,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.util.Date;
 
-@Document(indexName = "simulation",type = "news",indexStoreType="fs",shards=5,replicas=1,refreshInterval="-1")
+@Document(indexName = "simulation-new",type = "news",indexStoreType="fs",shards=5,replicas=1,refreshInterval="-1")
 public class New implements Serializable {
     @Id
     private String id;
